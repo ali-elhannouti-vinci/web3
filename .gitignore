@@ -1,0 +1,56 @@
+# --------------------
+# Dependency Directories
+# --------------------
+# Node.js module folder
+node_modules
+# Optional: if you use pnpm
+/pnpm-lock.yaml
+# Optional: if you use yarn
+/yarn-error.log
+
+# --------------------
+# Build & Output Files
+# --------------------
+/dist
+/build
+/out
+/tmp
+/coverage
+/.nyc_output
+/test-results.xml
+
+# TypeScript build artifacts
+/tsconfig.tsbuildinfo
+
+# --------------------
+# Environment & Sensitive Files
+# --------------------
+# Environment variables containing secrets
+.env
+.env.*
+.local
+*.log
+npm-debug.log*
+
+# --------------------
+# VS Code Configuration (Ignorer le cache et les fichiers de l'utilisateur)
+# --------------------
+# ⚠️ Ignorer tout le contenu du dossier .vscode par défaut
+.vscode/*
+
+# 🟢 Ré-inclure les fichiers de configuration essentiels du projet
+# Les paramètres d'espace de travail (règles de formatage, ESLint, etc.)
+!.vscode/settings.json 
+# Les extensions recommandées pour le projet
+!.vscode/extensions.json
+# Les configurations de débogage communes
+!.vscode/launch.json
+# Les configurations de tâches
+!.vscode/tasks.json
+
+# --------------------
+# OS & Editor Files
+# --------------------
+.DS_Store # macOS
+Thumbs.db # Windows
+*~        # Fichiers swap/backup Vim/Linux
