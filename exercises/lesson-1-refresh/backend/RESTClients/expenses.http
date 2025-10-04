@@ -1,0 +1,14 @@
+@baseUrl = http://localhost:3000
+
+### Get all
+GET {{baseUrl}}/expenses
+Content-Type: application/json
+
+### Create an expense
+POST {{baseUrl}}/expenses
+Content-Type: application/json
+
+{
+    "amount" : 12.50,
+    "description" : "Durum kebab"
+}

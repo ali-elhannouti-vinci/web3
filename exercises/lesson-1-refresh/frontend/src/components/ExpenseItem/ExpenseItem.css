@@ -1,0 +1,25 @@
+.expense-item-simple {
+    /* Fond sombre pour garantir la lisibilité du texte blanc (selon votre règle) */
+    background-color: #36454F; /* Un gris ardoise foncé pour un bon contraste */
+    
+    /* Ajoute de l'espace et sépare la boîte des autres éléments */
+    margin: 10px auto; /* 'auto' le centrera dans le flux si vous le souhaitez */
+    padding: 15px;
+    
+    /* Met la bordure en lumière pour qu'elle soit visible sur le fond gris clair */
+    border: 1px solid #778899; 
+    
+    /* Adoucit les coins */
+    border-radius: 6px;
+    
+    /* S'assure que la boîte ne dépasse pas le conteneur #root centré */
+    max-width: 600px; 
+    
+    /* Aligne le texte à gauche pour que les détails ne soient pas centrés comme dans #root */
+    text-align: left; 
+}
+
+.expense-item-simple > div {
+    /* Petite ligne de hauteur pour la lisibilité de l'information empilée */
+    line-height: 1.6;
+}

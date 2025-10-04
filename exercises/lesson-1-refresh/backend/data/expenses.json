@@ -1,0 +1,65 @@
+[
+  {
+    "id": "1",
+    "date": "2025-01-16",
+    "description": "Example expense #1 from Alice",
+    "payer": "Alice",
+    "amount": 25.5
+  },
+  {
+    "id": "2",
+    "date": "2025-01-15",
+    "description": "Example expense #2 from Bob",
+    "payer": "Bob",
+    "amount": 35
+  },
+  {
+    "id": "3",
+    "date": "2025-01-15",
+    "description": "Example expense #3 from Alice",
+    "payer": "Alice",
+    "amount": 2
+  },
+  {
+    "id": "1759618663700",
+    "date": "2025-10-04",
+    "description": "Durum kebab",
+    "payer": "Bob",
+    "amount": 12.5
+  },
+  {
+    "id": "1759618891813",
+    "date": "2025-10-04",
+    "description": "Durum kebab",
+    "payer": "Alice",
+    "amount": 12.5
+  },
+  {
+    "id": "1759619054488",
+    "date": "2025-10-04",
+    "description": "Durum kebab",
+    "payer": "Bob",
+    "amount": 12.5
+  },
+  {
+    "id": "1759619059474",
+    "date": "2025-10-04",
+    "description": "Durum kebab",
+    "payer": "Bob",
+    "amount": 12.5
+  },
+  {
+    "id": "1759619066023",
+    "date": "2025-10-04",
+    "description": "Durum kebab",
+    "payer": "Bob",
+    "amount": 12.5
+  },
+  {
+    "id": "1759619163553",
+    "date": "2025-10-04",
+    "description": "Durum kebab",
+    "payer": "Bob",
+    "amount": 12.5
+  }
+]
