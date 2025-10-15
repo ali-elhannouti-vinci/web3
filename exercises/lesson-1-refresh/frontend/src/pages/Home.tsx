@@ -1,34 +1,31 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ExpenseItem from "../components/ExpenseItem/ExpenseItem";
 import type { Expense } from "../types/Expense";
 import ExpenseAdd from "../components/ExpenseAdd/ExpenseAdd";
 
 function Home() {
   const defaultExpenses: Expense[] = [
-    {
-      id: "1",
-      date: "2025-09-28",
-      description: "Fournitures de bureau (stylos, papier)",
-      payer: "Alice",
-      amount: 45.5,
-    },
-    {
-      id: "2",
-      date: "2025-09-30",
-      description: "Déjeuner de travail avec le client",
-      payer: "Bob",
-      amount: 120.0,
-    },
-    {
-      id: "3",
-      date: "2025-10-02",
-      description: "Renouvellement de la licence Logiciel Pro",
-      payer: "Charlie",
-      amount: 399.99,
-    },
   ];
   const [expenses, setExpenses] = useState(defaultExpenses);
 
+  const fetchResponses = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/api/expenses");
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const json = await response.json();
+        setExpenses(json);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+  useEffect(() => {
+    fetchResponses()
+  },[])
   function handleAdd() : string {
 
     const possiblePayer = ["Alice","Bob"]

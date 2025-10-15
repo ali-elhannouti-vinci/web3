@@ -1,6 +1,6 @@
 var express = require("express");
 var router = express.Router();
-const { addExpense, getAllExpenses } = require("../services/expenses.js");
+const { addExpense, getAllExpenses,resetExpenses } = require("../services/expenses.js");
 
 router.get("/",async function (req, res, next) {
   const allExpenses = await getAllExpenses();
@@ -26,6 +26,16 @@ router.post("/",async function (req, res, next) {
 
   const addedExpenseId = await addExpense({ description, amount });
   return res.json(addedExpenseId);
+});
+
+router.post("/reset",async function (req, res, next) {
+  const resetData = resetExpenses();
+  if (resetData === 500) {
+    return res.sendStatus(500);
+  }
+  console.log("Reset data dans routes : ",resetData);
+  
+  return res.json(resetData);
 });
 
 module.exports = router;

@@ -1,7 +1,13 @@
-const {parseJsonFile,serializeToJsonFile} = require('../utils/json-utils')
+const {parseJsonFile,serializeToJsonFile, parseJsonFileSync, serializeToJsonFileSync} = require('../utils/json-utils')
 const path = require('path');
 
 const EXPENSES_PATH = path.join(__dirname, '..', 'data', 'expenses.json');
+const EXPENSES_INIT_PATH = path.join(
+  __dirname,
+  "..",
+  "data",
+  "expenses.init.json"
+);
 
 async function getAllExpenses()  {
     const expenses = await parseJsonFile(EXPENSES_PATH);
@@ -35,4 +41,16 @@ async function addExpense({description,amount}) {
     return id
 }
 
-module.exports = {getAllExpenses,addExpense}
+function resetExpenses() {
+    try {
+        const init_expenses = parseJsonFileSync(EXPENSES_INIT_PATH);
+        console.log("Expenses pour le reset : ",init_expenses);
+        serializeToJsonFileSync(EXPENSES_PATH,init_expenses);
+        return init_expenses;
+    }catch(err) {
+          console.error('Erreur lors du reset des data d expenses lors du traitement des fichiers de data', err);
+          return 500;
+    }
+}
+
+module.exports = {getAllExpenses,addExpense,resetExpenses}
