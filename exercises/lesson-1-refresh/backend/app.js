@@ -10,7 +10,7 @@ var expensesRouter = require("./routes/expenses");
 var app = express();
 
 var corsOptions = {
-  origin: 'http://localhost:5173/',
+  origin: 'http://localhost:5173',
   optionsSuccessStatus: 200
 }
 app.use(cors(corsOptions))

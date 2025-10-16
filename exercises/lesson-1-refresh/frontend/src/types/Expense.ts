@@ -6,7 +6,7 @@ interface Expense {
   amount: number;
 }
 
-type NewExpense = Omit<Expense,'id'>;
+type NewExpense = Pick<Expense,'amount' | 'description'>;
 
 export type {Expense,NewExpense}
 

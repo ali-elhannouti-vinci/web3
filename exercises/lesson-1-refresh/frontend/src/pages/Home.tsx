@@ -7,8 +7,13 @@ function Home() {
   const defaultExpenses: Expense[] = [
   ];
   const [expenses, setExpenses] = useState(defaultExpenses);
+  const [loading, setLoading] = useState(false); // is fetch in progress?
+  const [error, setError] = useState(""); // error message
+  
 
-  const fetchResponses = async () => {
+  const fetchExpenses = async () => {
+      setLoading(true);
+      setError("");
       try {
         const response = await fetch("http://localhost:3000/api/expenses");
 
@@ -16,36 +21,88 @@ function Home() {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        const json = await response.json();
-        setExpenses(json);
-      } catch (err) {
-        console.log(err);
+        const expensesJson = await response.json();
+        setExpenses(expensesJson);
+      } catch (err : unknown) {
+        if(err instanceof Error)
+          setError(err.message)
+      }finally{
+          setLoading(false);
       }
     }
 
   useEffect(() => {
-    fetchResponses()
+    try{
+      fetchExpenses()
+    }catch (err : unknown) {
+        if(err instanceof Error)
+          setError(err.message)
+    }
   },[])
-  function handleAdd() : string {
-
-    const possiblePayer = ["Alice","Bob"]
-    const randomIndex = Math.floor(Math.random() * possiblePayer.length);
-    const payer = possiblePayer[randomIndex]
+  async function handleAdd() {
+    setError("");
 
     const amount = Math.round((Math.random() * (100 - 0 + 1)) * 100) / 100;
-    
-    const id = Date.now().toString();
-    
-    const dateObj = new Date();
-    const date = dateObj.toISOString().slice(0, 10);
 
     const description = "Description example"
 
-    const addedExpense = {id,date,description,payer,amount}
+    const addedExpense = {description,amount}
 
-    const newExpenses = [...expenses,addedExpense]
-    setExpenses(newExpenses)
-    return id;
+    try {
+    const response = await fetch("http://localhost:3000/api/expenses", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(addedExpense), // ✅ on envoie du JSON
+    });
+
+    if (!response.ok) {
+      throw new Error(`Erreur HTTP : ${response.status}`);
+    }
+
+    const addedExpenseId = await response.json(); // ✅ on récupère la réponse (JSON)
+    console.log("Id de la dépense ajoutée :", addedExpenseId);
+    await fetchExpenses();
+    return addedExpenseId;
+  } catch (err : unknown) {
+        if(err instanceof Error)
+          setError(err.message)
+  }
+  }
+
+  async function handleReset() {
+    setError("");
+    const fetchOptions = {
+      method:"POST"
+    }
+    try {
+      const response = await fetch("http://localhost:3000/api/expenses/reset",fetchOptions);
+      if (!response.ok) {
+        throw new Error(`Erreur HTTP : ${response.status}`);
+      }
+      const responseData = await response.json();
+      await fetchExpenses();
+      return responseData;
+    } catch (err : unknown) {
+        if(err instanceof Error)
+          setError(err.message)
+    }
+  }
+
+  if (loading) {
+    return (
+      <>
+        <h1>Loading...</h1>
+      </>
+    )
+  }
+  if (error !== "") {
+    return (
+      <>
+        <h1>Error : {error}</h1>
+      </>
+    ) 
   }
   return (
     <>
@@ -62,6 +119,7 @@ function Home() {
         />
       ))}
       <ExpenseAdd handleAdd={handleAdd}></ExpenseAdd>
+      <button onClick={handleReset}>Reset expenses list</button>
     </>
   );
 }

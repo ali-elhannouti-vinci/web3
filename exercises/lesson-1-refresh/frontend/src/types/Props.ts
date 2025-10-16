@@ -1,5 +1,5 @@
 interface ExpenseAddProps{
-    handleAdd : () => string
+    handleAdd : () => Promise<number>
 }
 
 export type {ExpenseAddProps}
