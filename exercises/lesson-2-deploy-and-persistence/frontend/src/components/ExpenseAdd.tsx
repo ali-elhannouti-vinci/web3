@@ -1,29 +1,20 @@
-import type { Expense } from '../types/Expense';
+
+import type { ExpenseInput } from "../types/Expense";
+import Form from "./Form";
 
 interface ExpenseAddProps {
-  addExpense: (expense: Expense) => void;
+  addExpense: (expense: ExpenseInput) => void;
 }
 
 export default function ExpenseAdd({ addExpense }: ExpenseAddProps) {
-  const onAdd = () => {
-    const id = Date.now().toString();
-    const date = new Date().toISOString();
-    const description = `Random Expense ${id}`;
-    const payer = Math.random() < 0.5 ? 'Alice' : 'Bob';
-    const amount = parseFloat((Math.random() * 100).toFixed(2));
-
-    addExpense({
-      id,
-      date,
-      description,
-      payer,
-      amount,
-    });
-  };
+  const onSubmit = (data: ExpenseInput) => {
+  data.date = data.date + "T00:00:00.000Z";
+  addExpense(data);
+};
 
   return (
-    <div>
-      <button onClick={onAdd}>Add</button>
-    </div>
+    <>
+      <Form onSubmit={onSubmit}></Form>
+    </>
   );
 }

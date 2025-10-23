@@ -14,10 +14,10 @@ async function getAllExpenses() {
 }
 
 async function addExpense(expense) {
-  const nbAddedExpenses = await prisma.expense.create({
+  const addedExpense = await prisma.expense.create({
     data : expense
   })
-  return expense;
+  return addedExpense;
 }
 
 function resetExpenses() {
