@@ -1,0 +1,15 @@
+{
+  "folder-color.pathColors": [
+    {
+      "folderPath": "lesson-3-routing-style/backend/",
+      "color": "foldercolorizer.color_00ccff"
+    },
+    {
+      "folderPath": "lesson-3-routing-style/frontend/",
+      "color": "foldercolorizer.color_00cc66"
+    },
+    {
+      "folderPath": "lesson-3-routing-style/.devcontainer/"
+    }
+  ]
+}
