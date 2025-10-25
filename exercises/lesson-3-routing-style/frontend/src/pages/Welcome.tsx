@@ -1,13 +1,13 @@
-import { useContext } from "react";
-import { PageContext } from "../App";
+import { NavLink, Outlet } from "react-router-dom";
 
 export default function Welcome() {
-  const { setCurrentPage } = useContext(PageContext);
   return (
     <>
-      Welcome to the Expense Tracker
-      <button onClick={() => setCurrentPage('List')}>View Expenses</button>
-      <button onClick={() => setCurrentPage('Add')}>Add Expense</button>
+      <h1>Welcome to the Expense Tracker</h1>
+      <div><NavLink to={'/expenses/add'}>Add an expense</NavLink></div>
+      <div><NavLink to={'/expenses/list'}>View all the expenses</NavLink></div>
+
+      <Outlet></Outlet>
     </>
   );
 }
