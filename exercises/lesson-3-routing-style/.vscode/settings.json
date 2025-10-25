@@ -1,4 +1,8 @@
 {
+  "files.associations": {
+    "*.css": "tailwindcss",
+    "*.scss": "tailwindcss",
+  },
   "folder-color.pathColors": [
     {
       "folderPath": "lesson-3-routing-style/backend/",

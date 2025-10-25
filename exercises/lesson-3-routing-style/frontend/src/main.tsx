@@ -5,19 +5,28 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Welcome from './pages/Welcome.tsx';
 import Add from './pages/Add.tsx';
 import List from './pages/List.tsx';
+import Home from './pages/Home.tsx';
+import Layout from './pages/Layout.tsx';
 
 const router = createBrowserRouter([
     {
-      path: "/",
-      Component: Welcome,
+      Component: Layout,
       children: [
         {
-          path: "expenses/add",
+          index : true,
+          Component: Welcome,
+        },
+        {
+          path: "add",
           Component: Add,
         },
         {
-          path: "expenses/list",
+          path: "list",
           Component: List,
+        },
+        {
+          path: "home",
+          Component: Home,
         },
       ],
     },
