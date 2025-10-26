@@ -55,15 +55,15 @@ export default function List() {
   
   return (
     <>
-      <h1>Expense Sharing App</h1>
+      <h1 className="text-3xl">Expense Sharing App</h1>
 
       {error && <div>Erreur: {error}</div>}
-      <h2>Dépenses ({expenses.length})</h2>
+      <h2 className="text-3xl">Dépenses ({expenses.length})</h2>
       <div>
         {expenses.length === 0 ? (
           <p>Aucune dépense trouvée.</p>
         ) : (
-          <table>
+          <table className="text-xl">
             <tbody>
               {expenses.map((expense) => (
                 <ExpenseItem key={expense.id} expense={expense} />
