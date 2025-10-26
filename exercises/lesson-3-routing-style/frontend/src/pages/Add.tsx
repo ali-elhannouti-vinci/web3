@@ -46,7 +46,7 @@ export default function Add() {
     );
     const newExpensesActual = [addedExpense, ...expenses]; // Now that we have the actual added expense with id from backend, let's use it instead of the optimistically added one
     setExpenses(newExpensesActual);
-    navigate('/expenses/list')
+    navigate('/list')
   };
 
   return (
