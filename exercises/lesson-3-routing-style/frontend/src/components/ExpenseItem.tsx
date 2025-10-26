@@ -5,7 +5,7 @@ interface ExpenseItemProps {
 }
 
 export default function ExpenseItem({ expense }: ExpenseItemProps) {
-  const tdBaseTwClasses = "border text-left";
+  const tdBaseTwClasses = "border text-left p-1 ";
   return (
     <tr className="hover:bg-gray-600">
       <td className={tdBaseTwClasses}>#{expense.id}</td>
