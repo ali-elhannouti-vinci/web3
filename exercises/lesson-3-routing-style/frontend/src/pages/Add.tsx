@@ -2,6 +2,7 @@ import { useState } from "react";
 import ExpenseAdd from "../components/ExpenseAdd";
 import type { Expense, ExpenseInput } from "../types/Expense";
 import {  useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const host = import.meta.env.VITE_API_URL;
 
@@ -46,6 +47,9 @@ export default function Add() {
     );
     const newExpensesActual = [addedExpense, ...expenses]; // Now that we have the actual added expense with id from backend, let's use it instead of the optimistically added one
     setExpenses(newExpensesActual);
+    toast.success("Expense successfuly added !",{
+      duration:3500
+    })
     navigate('/list')
   };
 
@@ -53,6 +57,7 @@ export default function Add() {
     <>
       {error && <div>Error: {error}</div>}
       <h2>Add an expense</h2>
+
       <div>
         <ExpenseAdd addExpense={handleAddExpense} />
       </div>

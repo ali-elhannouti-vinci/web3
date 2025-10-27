@@ -1,4 +1,5 @@
 import type { Expense } from "../types/Expense";
+import { TableRow,TableCell } from "./ui/table";
 
 interface ExpenseItemProps {
   expense: Expense;
@@ -7,14 +8,14 @@ interface ExpenseItemProps {
 export default function ExpenseItem({ expense }: ExpenseItemProps) {
   const tdBaseTwClasses = "border text-left p-1 ";
   return (
-    <tr className="hover:bg-gray-600">
-      <td className={tdBaseTwClasses}>#{expense.id}</td>
-      <td className={tdBaseTwClasses}>{expense.date}</td>
-      <td className={tdBaseTwClasses}>{expense.description}</td>
-      <td className={tdBaseTwClasses}>
+    <TableRow className="hover:bg-gray-600">
+      <TableCell className={tdBaseTwClasses}>#{expense.id}</TableCell>
+      <TableCell className={tdBaseTwClasses}>{expense.date}</TableCell>
+      <TableCell className={tdBaseTwClasses}>{expense.description}</TableCell>
+      <TableCell className={tdBaseTwClasses}>
         Paid by <span>{expense.payer}</span>
-      </td>
-      <td className={tdBaseTwClasses.replace('text-left','text-right')}>${expense.amount.toFixed(2)}</td>
-    </tr>
+      </TableCell>
+      <TableCell className={tdBaseTwClasses.replace('text-left','text-right')}>${expense.amount.toFixed(2)}</TableCell>
+    </TableRow>
   );
 }

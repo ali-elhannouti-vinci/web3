@@ -3,6 +3,18 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+
 interface ExpenseAddProps {
   addExpense: (expense: ExpenseInput) => void;
 }
@@ -22,15 +34,17 @@ const expenseSchema = z.object({
 type FormData = z.infer<typeof expenseSchema>;
 
 export default function ExpenseAdd({ addExpense }: ExpenseAddProps) {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<FormData>({
+  const form = useForm<FormData>({
     resolver: zodResolver(expenseSchema),
   });
 
+  const {
+    handleSubmit,
+    formState: { isSubmitting },
+  } = form;
+
   const onSubmit = ({ description, payer, amount }: FormData) => {
+   
     addExpense({
       description,
       payer,
@@ -42,56 +56,81 @@ export default function ExpenseAdd({ addExpense }: ExpenseAddProps) {
   const isSubmitDisabled = isSubmitting;
 
   const addFormFieldsBaseTwClasses = "m-2 p-4 border "; // Votre classe existante
+  const fieldInputErrorsBaseTwClasses = "text-red-800 "
 
   return (
     // La classe existante sur le formulaire est conservée
-    <form
-      className="flex flex-col justify-center items-center"
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      {/* 1. Description - CLASSE APPLIQUÉE AU DIV */}
-      <div className={addFormFieldsBaseTwClasses}>
-        <label htmlFor="description">Description : </label>
-        <input
-          id="description"
-          type="text"
-          placeholder="Description"
-          {...register("description")}
-        />
-        {errors.description && <span> {errors.description.message}</span>}
-      </div>
-
-      {/* 2. Payeur - CLASSE APPLIQUÉE AU DIV */}
-      <div className={addFormFieldsBaseTwClasses}>
-        <label htmlFor="payer">Payeur : </label>
-        <select id="payer" {...register("payer")}>
-          <option value="Alice">Alice</option>
-          <option value="Bob">Bob</option>
-        </select>
-        {errors.payer && <span>{errors.payer.message}</span>}
-      </div>
-
-      {/* 3. Montant - CLASSE APPLIQUÉE AU DIV */}
-      <div className={addFormFieldsBaseTwClasses}>
-        <label htmlFor="amount">Montant : </label>
-        <input
-          id="amount"
-          type="number"
-          placeholder="Enter amount"
-          step={0.01}
-          {...register("amount")}
-        />
-        {errors.amount && <span>{errors.amount.message}</span>}
-      </div>
-
-      {/* 4. Bouton (Utilisation de la concaténation de classe existante) */}
-      <button
-        className={addFormFieldsBaseTwClasses + "text-green-400 bg-green-900 hover:bg-green-300"}
-        type="submit"
-        disabled={isSubmitDisabled}
+    <Form {...form}>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex flex-col justify-center items-center "
       >
-        {isSubmitting ? "Adding..." : "Add"}
-      </button>
-    </form>
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem className={addFormFieldsBaseTwClasses}>
+              <FormLabel>Description</FormLabel>
+              <FormControl>
+                <Input placeholder="Description" {...field} />
+              </FormControl>
+              <FormDescription>
+                Write inside the box what the expense is about
+              </FormDescription>
+              <FormMessage className={fieldInputErrorsBaseTwClasses}/>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="payer"
+          render={({ field }) => (
+            <FormItem className={addFormFieldsBaseTwClasses}>
+              <FormLabel>Payer</FormLabel>
+              <FormControl>
+                <select
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2"
+                  {...field}
+                >
+                  <option value="Alice">Alice</option>
+                  <option value="Bob">Bob</option>
+                </select>
+              </FormControl>
+              <FormMessage className={fieldInputErrorsBaseTwClasses}/>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="amount"
+          render={({ field }) => (
+            <FormItem className={addFormFieldsBaseTwClasses}>
+              <FormLabel>Amount</FormLabel>
+              <FormControl>
+                <Input
+                  type="number"
+                  step="0.01"
+                  placeholder="Enter amount"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage className={fieldInputErrorsBaseTwClasses}/>
+            </FormItem>
+          )}
+        />
+        <Button
+        variant="outline"
+          type="submit"
+          className={
+            addFormFieldsBaseTwClasses
+          }
+          disabled={isSubmitDisabled}
+        >
+          {isSubmitting ? "Adding..." : "Add"}
+        </Button>
+      </form>
+    </Form>
   );
 }
