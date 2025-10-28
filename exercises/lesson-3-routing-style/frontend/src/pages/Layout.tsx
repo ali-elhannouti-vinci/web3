@@ -29,7 +29,7 @@ export default function Layout() {
         </header>
 
         <main className="flex-1 flex justify-center items-center">
-          <div className="max-w-7xl w-full my-2 mx-10 px-4 sm:px-6 lg:px-8 debug-border-layout">
+          <div className="max-w-7xl w-full my-2 mx-10 px-4 sm:px-6 lg:px-8 debug-border-layout flex flex-col items-center">
             <Outlet />
           </div>
         </main>
