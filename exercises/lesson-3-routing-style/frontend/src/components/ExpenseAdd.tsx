@@ -55,21 +55,18 @@ export default function ExpenseAdd({ addExpense }: ExpenseAddProps) {
 
   const isSubmitDisabled = isSubmitting;
 
-  const addFormFieldsBaseTwClasses = "m-2 p-4 border "; // Votre classe existante
-  const fieldInputErrorsBaseTwClasses = "text-red-800 "
-
   return (
     // La classe existante sur le formulaire est conservée
     <Form {...form}>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col justify-center items-center "
+        className="flex flex-col justify-center items-center  "
       >
         <FormField
           control={form.control}
           name="description"
           render={({ field }) => (
-            <FormItem className={addFormFieldsBaseTwClasses}>
+            <FormItem className={"addExpenseFormField"}>
               <FormLabel>Description</FormLabel>
               <FormControl>
                 <Input placeholder="Description" {...field} />
@@ -77,7 +74,7 @@ export default function ExpenseAdd({ addExpense }: ExpenseAddProps) {
               <FormDescription>
                 Write inside the box what the expense is about
               </FormDescription>
-              <FormMessage className={fieldInputErrorsBaseTwClasses}/>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -86,7 +83,7 @@ export default function ExpenseAdd({ addExpense }: ExpenseAddProps) {
           control={form.control}
           name="payer"
           render={({ field }) => (
-            <FormItem className={addFormFieldsBaseTwClasses}>
+            <FormItem className={"addExpenseFormField"}>
               <FormLabel>Payer</FormLabel>
               <FormControl>
                 <select
@@ -97,7 +94,7 @@ export default function ExpenseAdd({ addExpense }: ExpenseAddProps) {
                   <option value="Bob">Bob</option>
                 </select>
               </FormControl>
-              <FormMessage className={fieldInputErrorsBaseTwClasses}/>
+              <FormMessage/>
             </FormItem>
           )}
         />
@@ -106,7 +103,7 @@ export default function ExpenseAdd({ addExpense }: ExpenseAddProps) {
           control={form.control}
           name="amount"
           render={({ field }) => (
-            <FormItem className={addFormFieldsBaseTwClasses}>
+            <FormItem className={"addExpenseFormField"}>
               <FormLabel>Amount</FormLabel>
               <FormControl>
                 <Input
@@ -116,7 +113,7 @@ export default function ExpenseAdd({ addExpense }: ExpenseAddProps) {
                   {...field}
                 />
               </FormControl>
-              <FormMessage className={fieldInputErrorsBaseTwClasses}/>
+              <FormMessage/>
             </FormItem>
           )}
         />
@@ -124,7 +121,7 @@ export default function ExpenseAdd({ addExpense }: ExpenseAddProps) {
         variant="outline"
           type="submit"
           className={
-            addFormFieldsBaseTwClasses
+            "addExpenseFormButton"
           }
           disabled={isSubmitDisabled}
         >

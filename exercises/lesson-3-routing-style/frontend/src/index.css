@@ -1,9 +1,11 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-@custom-variant dark (&:is(.dark *));
+/* @custom-variant dark (&:is(.dark *)); */
+@custom-variant dark (@media (prefers-color-scheme: dark));
 
 :root {
+  /* Styles de base non-couleur conservés */
   font-family: "Montserrat", sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -19,37 +21,55 @@
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+
+  --background: #f9f9f9;
+  --foreground: #77a6f8;
+
+  --card: #ffffff;
+  --card-foreground: #242424;
+  --popover: #ffffff;
+  --popover-foreground: #242424;
+  --primary: #353755;
+  --primary-foreground: #fcfcfc;
+  --secondary: #f7f7f7;
+  --secondary-foreground: #353755;
+  --muted: #f7f7f7;
+  --muted-foreground: #b5b5b5;
+  --accent: #f7f7f7;
+  --accent-foreground: #353755;
+  --destructive: #944040;
+  --border: #e7e7e7;
+  --input: #e7e7e7;
+  --ring: #b5b5b5;
+  --chart-1: #9566e0;
+  --chart-2: #84cc92;
+  --chart-3: #65406c;
+  --chart-4: #ccc275;
+  --chart-5: #a65842;
+
+  --sidebar: #fcfcfc;
+  --sidebar-foreground: #242424;
+  --sidebar-primary: #353755;
+  --sidebar-primary-foreground: #fcfcfc;
+  --sidebar-accent: #f7f7f7;
+  --sidebar-accent-foreground: #353755;
+  --sidebar-border: #e7e7e7;
+  --sidebar-ring: #b5b5b5;
+}
+
+/*
+ * 🚨 CORRECTION D'HÉRITAGE FLEXBOX / BUG DE LARGEUR RADIX UI 🚨
+ * * Cette règle surcharge la DIV intermédiaire injectée par Radix UI/NavigationMenuPrimitive.Root.
+ * Cette DIV, en ne prenant pas de largeur par défaut, coupait l'héritage Flexbox entre le NavigationMenu (large) et le NavigationMenuList.
+ * * En forçant width: 100% sur cette DIV, nous rétablissons la chaîne d'héritage et de distribution.
+ * * NOTE: Si cette règle ne s'applique pas, veuillez la déplacer dans votre fichier CSS pour lui
+ * donner une spécificité ou une priorité de chargement plus élevée.
+ */
+nav[data-slot="navigation-menu"] > div[style*="position: relative"] {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: stretch;
 }
 
 button {
@@ -70,20 +90,46 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-option {
-  color: #242424;
-}
-
-@media (prefers-color-scheme: light) {
+@media (prefers-color-scheme: dark) {
   :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
+    /* Couleurs fournies par l'utilisateur */
+    --background: #2d2e49;
+    --foreground: #dd4244;
+
+    /* Variables thématiques converties en Hex */
+    --card: #353755;
+    --card-foreground: #fcfcfc;
+    --popover: #353755;
+    --popover-foreground: #fcfcfc;
+    --primary: #f0f0f0;
+    --primary-foreground: #353755;
+    --secondary: #45476d;
+    --secondary-foreground: #fcfcfc;
+    --muted: #45476d;
+    --muted-foreground: #b5b5b5;
+    --accent: #45476d;
+    --accent-foreground: #fcfcfc;
+    --destructive: #b52f39;
+    --border: #fcfcfc1a; /* Reste en Hex + Opacité */
+    --input: #fcfcfc26; /* Reste en Hex + Opacité */
+    --ring: #949494;
+
+    /* Couleurs des graphiques converties en Hex */
+    --chart-1: #7d59dc;
+    --chart-2: #4a918a;
+    --chart-3: #94b966;
+    --chart-4: #804a9d;
+    --chart-5: #9c6360;
+
+    /* Couleurs de la barre latérale converties en Hex */
+    --sidebar: #353755;
+    --sidebar-foreground: #fcfcfc;
+    --sidebar-primary: #7d59dc;
+    --sidebar-primary-foreground: #fcfcfc;
+    --sidebar-accent: #45476d;
+    --sidebar-accent-foreground: #fcfcfc;
+    --sidebar-border: #fcfcfc1a;
+    --sidebar-ring: #949494;
   }
 }
 
@@ -125,53 +171,39 @@ option {
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
-}
-
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground rounded-lg;
-    --background: #2d2e49;
-    --foreground: #dd4244;
-  }
-  button {
-    @apply bg-background text-foreground border-foreground rounded-lg;
+    @apply bg-background text-foreground;
   }
 }
 
 @layer components {
+  .border {
+    @apply border rounded-lg;
+  }
+
+  .addExpenseFormField {
+    @apply m-2 p-4 border rounded-lg;
+  }
+
+  .addExpenseFormButton {
+    @apply m-2 p-4 border rounded-lg;
+  }
+
+  .tableCell {
+    @apply border rounded-none text-left p-1;
+  }
+}
+
+@layer utilities {
+  .debug-active .debug-border {
+    @apply border border-green-400;
+  }
+
+  .debug-active .debug-border-layout {
+    @apply border border-red-500;
+  }
 }

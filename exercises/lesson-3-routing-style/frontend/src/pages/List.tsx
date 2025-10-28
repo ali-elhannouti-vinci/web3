@@ -77,11 +77,12 @@ export default function List() {
         {expenses.length === 0 ? (
           <p>Aucune dépense trouvée.</p>
         ) : (
-          <div className="overflow-x-auto border rounded-lg">
+          <div className="overflow-x-auto border">
             <Table>
               <TableCaption>Expenses list</TableCaption>
               <TableHeader>
-                <TableRow>
+                {/* hover:bg-background pour désactiver le gris par défaut quand on hover sur une TableRow */}
+                <TableRow className="hover:bg-background">
                   <TableHead className="text-center">ID</TableHead>
                   <TableHead className="text-center">Date</TableHead>
                   <TableHead className="text-center">Description</TableHead>
