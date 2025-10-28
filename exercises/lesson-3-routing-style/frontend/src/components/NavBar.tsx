@@ -1,11 +1,11 @@
 import {
   NavigationMenu,
-  NavigationMenuContent,
+  // NavigationMenuContent,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-  NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
+  // NavigationMenuTrigger,
+  // navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { NavLink, useLocation } from "react-router-dom";
 

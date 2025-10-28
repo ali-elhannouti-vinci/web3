@@ -5,7 +5,7 @@ import {
   Table,
   TableBody,
   TableCaption,
-  TableCell,
+  // TableCell,
   TableHead,
   TableHeader,
   TableRow,
