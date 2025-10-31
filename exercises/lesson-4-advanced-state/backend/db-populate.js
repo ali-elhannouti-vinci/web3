@@ -37,22 +37,22 @@ async function createUsersAndGetTheirIds() {
 
 async function main() {
   const newUsersIds = await createUsersAndGetTheirIds();
-  const [kratosUser, freddyUser, walterUser] = newUsersIds;
+  const [kratosUserId, freddyUserId, walterUserId] = newUsersIds;
 
   const transfers = await prisma.transfer.createMany({
     data: [
-      { amount: 0.5, sourceId: kratosUser, targetId: freddyUser },
-      { amount: 1.25, sourceId: freddyUser, targetId: walterUser },
-      { amount: 0.75, sourceId: walterUser, targetId: kratosUser },
+      { amount: 0.5, sourceId: kratosUserId, targetId: freddyUserId },
+      { amount: 1.25, sourceId: freddyUserId, targetId: walterUserId },
+      { amount: 0.75, sourceId: walterUserId, targetId: kratosUserId },
     ],
     skipDuplicates: true, // Skip duplicates based on unique constraints
   });
 
   const expenses = await prisma.expense.createMany({
     data: [
-      { description: 'Pizza', amount: 0.5, payerId: kratosUser },
-      { description: 'Boissons', amount: 1.0, payerId: freddyUser },
-      { description: 'Sushis', amount: 2.0, payerId: walterUser },
+      { description: 'Pizza', amount: 0.5, payerId: kratosUserId,participants : {connect :[{id : kratosUserId}] }},
+      { description: 'Boissons', amount: 1.0, payerId: freddyUserId ,participants : {connect :[{id : freddyUserId}] }},
+      { description: 'Sushis', amount: 2.0, payerId: walterUserId, participants : {connect :[{id : walterUserId}] }},
     ],
     skipDuplicates: true, // Skip duplicates based on unique constraints
   });
