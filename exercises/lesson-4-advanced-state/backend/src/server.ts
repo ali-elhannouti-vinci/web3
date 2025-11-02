@@ -9,6 +9,7 @@ import rateLimiter from "@/common/middleware/rateLimiter";
 import requestLogger from "@/common/middleware/requestLogger";
 import { env } from "@/common/utils/envConfig";
 import expenseRouter from "./api/expense/expenseRouter";
+import transferRouter from "./api/transfer/transferRouter";
 
 const logger = pino({ name: "server start" });
 const app: Express = express();
@@ -30,6 +31,7 @@ app.use(requestLogger);
 app.use("/health-check", healthCheckRouter);
 app.use("/api/users", userRouter);
 app.use("/api/expenses", expenseRouter);
+app.use("/api/transfers", transferRouter);
 
 // Error handlers
 app.use(errorHandler());
