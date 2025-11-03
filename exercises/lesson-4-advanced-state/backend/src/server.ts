@@ -10,6 +10,7 @@ import requestLogger from "@/common/middleware/requestLogger";
 import { env } from "@/common/utils/envConfig";
 import expenseRouter from "./api/expense/expenseRouter";
 import transferRouter from "./api/transfer/transferRouter";
+import transactionRouter from "./api/transaction/transactionRouter";
 
 const logger = pino({ name: "server start" });
 const app: Express = express();
@@ -32,6 +33,7 @@ app.use("/health-check", healthCheckRouter);
 app.use("/api/users", userRouter);
 app.use("/api/expenses", expenseRouter);
 app.use("/api/transfers", transferRouter);
+app.use("/api/transactions",transactionRouter)
 
 // Error handlers
 app.use(errorHandler());

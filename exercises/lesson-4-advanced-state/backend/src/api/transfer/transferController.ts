@@ -1,4 +1,4 @@
-import type { Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import * as expenseRepository from "./transferRepository";
 import { StatusCodes } from "http-status-codes/build/cjs/status-codes";
 
@@ -18,11 +18,16 @@ export async function getTransferDetail(req: Request, res: Response) {
   res.status(StatusCodes.OK).json(transfer);
 }
 
-export async function createTransfer(req: Request, res: Response) {
+export async function createTransfer(req: Request, res: Response,next:NextFunction) {
   const { amount,date,sourceId,targetId } = req.body;
 
-  const newTransfer = await expenseRepository.createTransfer({
+  try {
+    const newTransfer = await expenseRepository.createTransfer({
     amount,date,sourceId,targetId
   });
   res.status(StatusCodes.CREATED).json(newTransfer);
+  } catch (error) {
+    next(error)
+  }
+  
 }

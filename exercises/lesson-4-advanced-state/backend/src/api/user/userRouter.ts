@@ -1,7 +1,7 @@
-  import { Router } from 'express';
-import { sendAllUsers } from './userController';
+import { Router } from "express";
+import { listAllUsers } from "./userController";
 const router = Router();
 
-router.get('/',sendAllUsers);
+router.get("/", listAllUsers);
 
 export default router;

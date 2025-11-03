@@ -1,4 +1,4 @@
- import type { Request, Response } from "express";
+ import type { Request, Response,NextFunction } from "express";
   import * as expenseRepository from './expenseRepository';
   import { StatusCodes } from "http-status-codes/build/cjs/status-codes";
 
@@ -17,10 +17,11 @@
   }
 
 
-  export async function createExpense(req: Request, res: Response) {
+  export async function createExpense(req: Request, res: Response,next:NextFunction) {
       const { description, amount, date, payerId, participantIds } = req.body;
 
-      const newExpense = await expenseRepository.createExpense({
+      try {
+        const newExpense = await expenseRepository.createExpense({
         description,
         amount: parseFloat(amount),
         date: date ? new Date(date) : new Date(),
@@ -28,4 +29,7 @@
         participantIds: participantIds
       });
       res.status(StatusCodes.CREATED).json(newExpense);
+      } catch (error) {
+        next(error);
+      }
   }
