@@ -22,6 +22,6 @@ export const loader : LoaderFunction = async ({
     throw new Response("ID non valide", { status: 400 });
   }
 
-    const expenses = await ApiClient.getExpenseById(idNumber);
-    return { expenses };
+    const expense = await ApiClient.getExpenseById(idNumber);
+    return { expense };
 }

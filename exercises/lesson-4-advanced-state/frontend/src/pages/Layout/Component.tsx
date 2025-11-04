@@ -1,5 +1,5 @@
 import { NavLink, Outlet, useLoaderData } from 'react-router';
-import { useState } from 'react';
+import { useState,type ChangeEvent } from 'react';
 import type { User } from '@/types/User';
 import type { LoaderData } from './loader';
 
@@ -7,9 +7,11 @@ export default function Layout() {
   const { users } = useLoaderData<LoaderData>();
   const [currentUser, setCurrentUser] = useState<null | User>(null);
 
-  const handleUserChange = (e) => {
-    const id = e.target.value;
+  const handleUserChange = (e : ChangeEvent<HTMLSelectElement>) => {
+    const id = e.currentTarget.value;
     const newCurrentUser = users.find(user => user.id === Number(id)) ?? null;
+    console.log("Current user selected in context : ",newCurrentUser);
+    
     setCurrentUser(newCurrentUser);
   };
 
@@ -27,6 +29,9 @@ export default function Layout() {
           </NavLink>
           <NavLink to="/transfers/new" className="mr-4">
             New Transfer
+          </NavLink>
+          <NavLink to="/expenses/new" className="mr-4">
+            New Expense
           </NavLink>
 
           <select

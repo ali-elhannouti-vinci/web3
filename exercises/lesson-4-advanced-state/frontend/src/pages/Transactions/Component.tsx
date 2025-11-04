@@ -10,7 +10,7 @@ export default function Transactions() {
     <section>
       <ul>
         {transactions.map((tx : Transaction) => (
-          <li key={`${tx.id}`} >
+          <li key={`${tx.id}`} className='border'>
               {tx.kind === 'expense' ? (
                 <ExpenseTransactionItem {...tx} />
               ) : (

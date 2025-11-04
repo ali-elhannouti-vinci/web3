@@ -1,4 +1,4 @@
-import type { Expense } from "@/types/Expense";
+import type { Expense, NewExpensePayload } from "@/types/Expense";
 import type { Transaction } from "@/types/Transaction";
 import type { NewTransferPayload, Transfer } from "@/types/Transfer";
 import type { User } from "@/types/User";
@@ -18,11 +18,12 @@ const sendApiRequest = async (
     });
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      throw response
     }
     return await response.json();
   } catch (error) {
     console.error("API request failed:", error);
+    throw error;
   }
 };
 
@@ -32,6 +33,9 @@ const getUsers: () => Promise<User[]> = () =>
   sendApiRequest("GET", "users") as Promise<User[]>;
 const getExpenseById: (id: number) => Promise<Expense> = (id) =>
   sendApiRequest("GET", `expenses/${id}`) as Promise<Expense>;
+const createExpense: (payload: NewExpensePayload) => Promise<Expense> = (
+  payload
+) => sendApiRequest("POST", "expenses", payload) as Promise<Expense>;
 const createTransfer: (payload: NewTransferPayload) => Promise<Transfer> = (
   payload
 ) => sendApiRequest("POST", "transfers", payload) as Promise<Transfer>;
@@ -40,7 +44,8 @@ export const ApiClient = {
   getUsers,
   getTransactions,
   getExpenseById,
-  createTransfer,
+  createExpense,
+  createTransfer
 };
 
 export default ApiClient;

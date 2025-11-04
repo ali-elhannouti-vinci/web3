@@ -9,8 +9,8 @@ const DATE_FORMAT_OPTIONS = {
   timeZone: "UTC" as const, // Utiliser 'as const' améliore la typage
 };
 
-export default function TransferTransactionItem({
-    id,
+export default function ExpenseTransactionItem({
+  id,
   amount,
   date,
   payer,
@@ -22,15 +22,17 @@ export default function TransferTransactionItem({
     DATE_FORMAT_OPTIONS
   );
 
+  const expenseId = id.replace("expense-", "");
+
   return (
     <>
       <h1>
-        {payer.name} paid ${amount} for {participants.length} people on
+        {payer.name} paid ${amount} for {participants.length} people on{" "}
         {formattedDate}
       </h1>
-      <NavLink to={`/expenses/${id}`}>
-        Home
-      </NavLink>
+      <div className="inline-flex border rounded-lg border-green-700 ">
+        <NavLink to={`/expenses/${expenseId}`}>Détails</NavLink>
+      </div>
     </>
   );
 }

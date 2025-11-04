@@ -22,7 +22,7 @@ export default function TransferTransactionItem({
 
   return (
     <h1>
-      {payer.name} transferred €{amount} to {participants[0].name} on 
+      {payer.name} transferred €{amount} to {participants[0].name} on{" "}
       {formattedDate}
     </h1>
   );
