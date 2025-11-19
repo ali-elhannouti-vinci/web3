@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/navigation-menu";
 import { NavLink, useLocation } from "react-router-dom";
 
-// TODO Boutons qui prennent toute la place dispo pour chacun (chacun prend une part équitable de la navbar).
 export default function NavigationMenuDemo() {
   const location = useLocation();
   const currentPagePath = location.pathname;
