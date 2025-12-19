@@ -13,46 +13,48 @@ const augmentSchema = (builder: typeof SchemaBuilder) => {
     }),
   });
 
-  builder.queryType({
-    fields: (t) => ({
-      users: t.field({
-        type: [userRef],
-        resolve: async (_root, args, _ctx, _info) => {
-          return userRepository.getAllUsers();
-        },
-      }),
-      user: t.field({
-        type: userRef,
-        args: {
-          id: t.arg.int({ required: true }),
-        },
-        resolve: async (_root, args, _ctx, _info) => {
-          return userRepository.getUserById(args.id as number);
-        },
-      }),
-    }),
-  });
+  // Récupérer tous les utilisateurs
+  builder.queryField("users", (t) =>
+    t.field({
+      type: [userRef],
+      resolve: async (_root, args, _ctx, _info) => {
+        return userRepository.getAllUsers();
+      },
+    })
+  );
 
-  builder.mutationType({
-    fields: (t) => ({
-      createUser: t.field({
-        type: userRef,
-        args: {
-          name: t.arg.string({ required: true }),
-          email: t.arg.string({ required: true }),
-          bankAccount: t.arg.string(),
-        },
-        resolve: async (_parent, args, _context, _info) => {
-          const { name, email, bankAccount } = args;
-          return userRepository.createUser({
-            name,
-            email,
-            bankAccount,
-          });
-        },
-      }),
-    }),
-  });
+  // Récupérer un utilisateur par ID
+  builder.queryField("user", (t) =>
+    t.field({
+      type: userRef,
+      args: {
+        id: t.arg.int({ required: true }),
+      },
+      resolve: async (_root, args, _ctx, _info) => {
+        return userRepository.getUserById(args.id as number);
+      },
+    })
+  );
+
+  // Créer un utilisateur
+  builder.mutationField("createUser", (t) =>
+    t.field({
+      type: userRef,
+      args: {
+        name: t.arg.string({ required: true }),
+        email: t.arg.string({ required: true }),
+        bankAccount: t.arg.string(),
+      },
+      resolve: async (_parent, args, _context, _info) => {
+        const { name, email, bankAccount } = args;
+        return userRepository.createUser({
+          name,
+          email,
+          bankAccount,
+        });
+      },
+    })
+  );
 };
 
 export default augmentSchema;
