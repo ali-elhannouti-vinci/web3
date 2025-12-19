@@ -1,5 +1,4 @@
 import SchemaBuilder from "../../graphql/builder";
-import * as expenseRepository from "../expense/expenseRepository";
 import * as userRepository from "./userRepository";
 
 const augmentSchema = (builder: typeof SchemaBuilder) => {
