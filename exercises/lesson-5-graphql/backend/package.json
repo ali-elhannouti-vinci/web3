@@ -11,16 +11,24 @@
     "test:cov": "vitest run --coverage"
   },
   "dependencies": {
+    "@apollo/client": "^4.0.10",
+    "@apollo/server": "^5.2.0",
+    "@as-integrations/express5": "^1.1.2",
     "@asteasolutions/zod-to-openapi": "7.3.4",
+    "@pothos/core": "^4.10.0",
+    "@pothos/plugin-prisma": "^4.14.0",
     "@prisma/client": "6.16.3",
     "cors": "2.8.5",
     "dotenv": "17.2.1",
     "express": "5.1.0",
     "express-rate-limit": "8.0.1",
+    "graphql": "^16.12.0",
+    "graphql-scalars": "^1.25.0",
     "helmet": "8.1.0",
     "http-status-codes": "2.3.0",
     "pino": "9.9.0",
     "pino-http": "10.5.0",
+    "ruru": "^2.0.0-rc.3",
     "swagger-ui-express": "5.0.1",
     "zod": "3.25.76"
   },
@@ -54,5 +62,9 @@
     "dts": true,
     "splitting": false,
     "skipNodeModulesBundle": true
+  },
+  "graphql": {
+    "schema": "https://localhost:3000/graphql",
+    "documents": "**/*.{graphql,js,ts,jsx,tsx}"
   }
 }

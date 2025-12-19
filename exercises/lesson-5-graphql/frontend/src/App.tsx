@@ -5,6 +5,8 @@ import Transactions, { loader as transactionsLoader } from './pages/Transactions
 import ExpenseDetail, { loader as expenseDetailLoader } from './pages/ExpenseDetails';
 import NewTransfer, { loader as NewTransferLoader } from './pages/NewTransfer';
 import NewExpense, { loader as NewExpenseLoader } from './pages/NewExpense';
+import { ApolloProvider } from '@apollo/client/react';
+import client from './lib/graphql-client';
 
 const router = createBrowserRouter([
   {
@@ -39,7 +41,11 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return <RouterProvider router={router}></RouterProvider>;
+  return (
+    <ApolloProvider client={client}>
+      <RouterProvider router={router} />
+    </ApolloProvider>
+  );
 }
 
 export default App;

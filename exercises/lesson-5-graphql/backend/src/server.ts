@@ -11,9 +11,23 @@ import { env } from '@/common/utils/envConfig';
 import expenseRouter from './api/expense/expenseRouter';
 import transferRouter from './api/transfer/transferRouter';
 import transactionRouter from './api/transaction/transactionRouter';
+import graphqlMiddleware from "./graphql/server";
+import { ruruHTML } from "ruru/server";
+
 
 const logger = pino({ name: 'server start' });
 const app: Express = express();
+
+
+if (env.isDevelopment) {
+    const config = { endpoint: "/graphql" };
+    // Serve Ruru HTML
+    app.get("/ruru", (req, res) => {
+    res.format({
+        html: () => res.status(200).send(ruruHTML(config)),
+        default: () => res.status(406).send("Not Acceptable"),
+    });
+});
 
 // Set the application to trust the reverse proxy
 app.set('trust proxy', true);
@@ -36,7 +50,11 @@ app.use('/api/expenses', expenseRouter);
 app.use('/api/transfers', transferRouter);
 app.use('/api/transactions', transactionRouter);
 
+app.use("/graphql", graphqlMiddleware);
+
 // Error handlers
 app.use(errorHandler());
+
+}
 
 export { app, logger };

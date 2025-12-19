@@ -13,6 +13,8 @@ import { Checkbox } from '@/components/ui/checkbox';
 import type { LoaderData } from './loader';
 import { toast } from 'sonner';
 import { useState } from 'react';
+import { gql } from '@apollo/client';
+import graphqlClient from '@/lib/graphql-client';
 
 const expenseSchema = z.object({
   description: z.string().min(1, 'Description is required'),
@@ -23,6 +25,15 @@ const expenseSchema = z.object({
 });
 
 type ExpenseFormData = z.infer<typeof expenseSchema>;
+
+const CREATE_EXPENSE_GQL = gql`
+  mutation CreateExpense($description: String!, $amount: Float!, $date: DateTime!, $payerId: Int!, $participantIds: [Int!]!) {
+    createExpense(description: $description, amount: $amount, date: $date, payerId: $payerId, participantIds: $participantIds) {
+      id
+      description
+    }
+  }
+`;
 
 export default function ExpenseForm() {
   const currentUser = useCurrentUser();
@@ -42,12 +53,15 @@ export default function ExpenseForm() {
 
   const onSubmit = async (data: ExpenseFormData) => {
     try {
-      await ApiClient.createExpense({
-        description: data.description,
-        amount: data.amount,
-        date: data.date ? new Date(data.date).toISOString() : new Date().toISOString(),
-        payerId: Number(data.payerId),
-        participantIds: data.participantIds.map((id) => Number(id)),
+      await graphqlClient.mutate({
+        mutation: CREATE_EXPENSE_GQL,
+        variables: {
+          description: data.description,
+          amount: data.amount,
+          date: data.date,
+          payerId: Number(data.payerId),
+          participantIds: data.participantIds.map(id => Number(id)),
+        },
       });
       toast('Expense has been created.');
       return navigate('/transactions');
