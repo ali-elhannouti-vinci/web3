@@ -1,6 +1,0 @@
-dist
-node_modules
-.github
-.changeset
-generated/
-src/data/post/course-lessons/*.md
