@@ -17,7 +17,7 @@
     "@pothos/core": "^4.10.0",
     "@pothos/plugin-prisma": "^4.12.0",
     "@pothos/plugin-validation": "^4.2.0",
-    "@prisma/cli-dev": "^0.8.3",
+    "@prisma/cli-dev": "^0.13.0",
     "@prisma/client": "6.16.3",
     "cors": "2.8.5",
     "dotenv": "^17.2.1",
