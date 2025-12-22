@@ -1,27 +1,41 @@
-import { NavLink, useLocation } from 'react-router';
+// Example: src/components/Header.tsx or updating existing navbar
+import { Link, useNavigate } from 'react-router';
+import { useAuth } from '@/contexts/AuthContext';
+import { Button } from '@/components/ui/button';
 
-const Navbar = () => {
-  const location = useLocation();
-  const currentPath = location.pathname;
+export default function NavBar() {
+  const { isAuthenticated, user, logout } = useAuth();
+  const navigate = useNavigate();
 
-  const navlinkClassName = (path: string) => {
-    const defaultClass = 'px-8 text-white hover:bg-green-800';
-    return `${defaultClass} ` + (currentPath === path ? `font-bold` : '');
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
   };
 
   return (
-    <nav className="flex flex-row w-lvw shadow-lg justify-center p-4 bg-green-900 text-white">
-      <NavLink to="/" className={navlinkClassName('/')}>
-        Home
-      </NavLink>
-      <NavLink to="/list" className={navlinkClassName('/list')}>
-        Expenses
-      </NavLink>
-      <NavLink to="/add" className={navlinkClassName('/add')}>
-        Add Expense
-      </NavLink>
-    </nav>
-  );
-};
+    <header className="bg-white shadow">
+      <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+        <Link to="/" className="text-xl font-bold">
+          Expenso
+        </Link>
 
-export default Navbar;
+        <nav className="flex items-center gap-4">
+          {isAuthenticated ? (
+            <>
+              <span className="text-gray-700">
+                Welcome, {user?.email}
+              </span>
+              <Button onClick={handleLogout} variant="outline">
+                Logout
+              </Button>
+            </>
+          ) : (
+            <Button onClick={() => navigate('/login')}>
+              Login
+            </Button>
+          )}
+        </nav>
+      </div>
+    </header>
+  );
+}

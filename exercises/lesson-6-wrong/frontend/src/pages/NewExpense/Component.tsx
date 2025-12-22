@@ -1,25 +1,40 @@
-import { useLoaderData, useNavigate } from 'react-router';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { useCurrentUser } from '@/pages/Layout';
-import { Receipt, EuroIcon, Users, AlertCircle, Calendar } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Checkbox } from '@/components/ui/checkbox';
-import type { LoaderData } from './loader';
-import { toast } from 'sonner';
-import { gql } from '@apollo/client';
-import graphqlClient from '@/lib/graphql-client';
+import { useLoaderData, useNavigate } from "react-router";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { useCurrentUser } from "@/pages/Layout";
+import { Receipt, EuroIcon, Users, AlertCircle, Calendar } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Checkbox } from "@/components/ui/checkbox";
+import type { LoaderData } from "./loader";
+import { toast } from "sonner";
+import { gql } from "@apollo/client";
+import graphqlClient from "@/lib/graphql-client";
+import { useAuth } from "@/contexts/AuthContext";
 
 const expenseSchema = z.object({
-  description: z.string().min(1, 'Description is required'),
-  payerId: z.string().min(1, 'Payer is required'),
-  amount: z.coerce.number<number>().min(0.01, 'Amount must be greater than 0'),
+  description: z.string().min(1, "Description is required"),
+  amount: z.coerce.number<number>().min(0.01, "Amount must be greater than 0"),
   date: z.iso.date(),
-  participantIds: z.array(z.string()).min(1, 'At least one participant is required'),
+  participantIds: z
+    .array(z.string())
+    .min(1, "At least one participant is required"),
 });
 
 const CREATE_EXPENSE_GQL = gql`
@@ -46,17 +61,16 @@ const CREATE_EXPENSE_GQL = gql`
 type ExpenseFormData = z.infer<typeof expenseSchema>;
 
 export default function ExpenseForm() {
-  const currentUser = useCurrentUser();
+  const { user } = useAuth();
   const { users } = useLoaderData<LoaderData>();
   const navigate = useNavigate();
 
   const form = useForm<ExpenseFormData>({
     resolver: zodResolver(expenseSchema),
     defaultValues: {
-      description: '',
-      payerId: currentUser?.id.toString() || '',
+      description: "",
       amount: 0,
-      date: new Date().toISOString().split('T')[0],
+      date: new Date().toISOString().split("T")[0],
       participantIds: [],
     },
   });
@@ -68,18 +82,18 @@ export default function ExpenseForm() {
         variables: {
           description: data.description,
           amount: data.amount,
-          date: data.date,
-          payerId: Number(data.payerId),
+          date: data.date ? new Date(data.date) : new Date(),
+          payerId: user!.userId,
           participantIds: data.participantIds.map((id) => Number(id)),
         },
       });
-      toast('Expense has been created.');
-      return navigate('/transactions');
+      toast("Expense has been created.");
+      return navigate("/transactions");
     } catch (error) {
-      console.error('Expense creation failed:', error);
-      form.setError('root', {
-        type: 'custom',
-        message: 'Could not create new expense',
+      console.error("Expense creation failed:", error);
+      form.setError("root", {
+        type: "custom",
+        message: "Could not create new expense",
       });
     }
   };
@@ -88,7 +102,9 @@ export default function ExpenseForm() {
     <section className="container mx-auto px-4 py-6">
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-foreground">New Expense</h1>
-        <p className="text-muted-foreground">Split an expense between participants</p>
+        <p className="text-muted-foreground">
+          Split an expense between participants
+        </p>
       </div>
 
       <div className="max-w-xl mx-auto">
@@ -97,7 +113,9 @@ export default function ExpenseForm() {
           {form.formState.errors.root && (
             <div className="mb-4 p-3 bg-destructive/10 border border-destructive/20 rounded-lg flex items-start gap-2">
               <AlertCircle className="w-4 h-4 text-destructive mt-0.5 flex-shrink-0" />
-              <p className="text-destructive text-sm">{form.formState.errors.root.message}</p>
+              <p className="text-destructive text-sm">
+                {form.formState.errors.root.message}
+              </p>
             </div>
           )}
 
@@ -109,11 +127,17 @@ export default function ExpenseForm() {
                 name="description"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium text-foreground">Description</FormLabel>
+                    <FormLabel className="text-sm font-medium text-foreground">
+                      Description
+                    </FormLabel>
                     <FormControl>
                       <div className="relative">
                         <Receipt className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                        <Input placeholder="What was this expense for?" className="pl-9" {...field} />
+                        <Input
+                          placeholder="What was this expense for?"
+                          className="pl-9"
+                          {...field}
+                        />
                       </div>
                     </FormControl>
                     <FormMessage />
@@ -127,11 +151,19 @@ export default function ExpenseForm() {
                 name="amount"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium text-foreground">Amount</FormLabel>
+                    <FormLabel className="text-sm font-medium text-foreground">
+                      Amount
+                    </FormLabel>
                     <FormControl>
                       <div className="relative">
                         <EuroIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                        <Input type="number" step="0.01" placeholder="0.00" className="pl-9" {...field} />
+                        <Input
+                          type="number"
+                          step="0.01"
+                          placeholder="0.00"
+                          className="pl-9"
+                          {...field}
+                        />
                       </div>
                     </FormControl>
                     <FormMessage />
@@ -145,7 +177,9 @@ export default function ExpenseForm() {
                 name="date"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium text-foreground">Date</FormLabel>
+                    <FormLabel className="text-sm font-medium text-foreground">
+                      Date
+                    </FormLabel>
                     <FormControl>
                       <div className="relative">
                         <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
@@ -157,34 +191,7 @@ export default function ExpenseForm() {
                 )}
               />
 
-              {/* Payer Selection */}
-              <FormField
-                control={form.control}
-                name="payerId"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-sm font-medium text-foreground">Paid by</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select who paid" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {users.map((user) => (
-                          <SelectItem key={user.id} value={user.id.toString()}>
-                            <div className="flex items-center gap-2">
-                              <Users className="w-4 h-4 text-muted-foreground" />
-                              {user.name}
-                            </div>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              
 
               {/* Participants Selection */}
               <FormField
@@ -192,20 +199,36 @@ export default function ExpenseForm() {
                 name="participantIds"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium text-foreground">Split between</FormLabel>
+                    <FormLabel className="text-sm font-medium text-foreground">
+                      Split between
+                    </FormLabel>
                     <div className="space-y-3">
                       {users.map((user) => (
-                        <div key={user.id} className="flex items-center space-x-3">
+                        <div
+                          key={user.id}
+                          className="flex items-center space-x-3"
+                        >
                           <Checkbox
                             id={`participant-${user.id}`}
                             checked={field.value.includes(user.id.toString())}
                             onCheckedChange={(checked) => {
                               if (checked) {
-                                const newParticipants = [...field.value, user.id.toString()];
-                                form.setValue('participantIds', newParticipants);
+                                const newParticipants = [
+                                  ...field.value,
+                                  user.id.toString(),
+                                ];
+                                form.setValue(
+                                  "participantIds",
+                                  newParticipants
+                                );
                               } else {
-                                const newParticipants = field.value.filter((id) => id !== user.id.toString());
-                                form.setValue('participantIds', newParticipants);
+                                const newParticipants = field.value.filter(
+                                  (id) => id !== user.id.toString()
+                                );
+                                form.setValue(
+                                  "participantIds",
+                                  newParticipants
+                                );
                               }
                             }}
                           />
@@ -224,7 +247,12 @@ export default function ExpenseForm() {
                 )}
               />
 
-              <Button type="submit" disabled={form.formState.isSubmitting} className="w-full" size="lg">
+              <Button
+                type="submit"
+                disabled={form.formState.isSubmitting}
+                className="w-full"
+                size="lg"
+              >
                 {form.formState.isSubmitting ? (
                   <div className="flex items-center gap-2">
                     <div className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />

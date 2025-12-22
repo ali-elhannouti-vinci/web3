@@ -1,6 +1,8 @@
 import { Expense } from '@/generated/prisma/client';
 import SchemaBuilder from '../../graphql/builder';
 import * as expenseRepository from './expenseRepository';
+import { requireAuth } from '@/graphql/authHelpers';
+import { GraphQLError } from 'graphql';
 
 const augmentSchema = (builder: typeof SchemaBuilder) => {
   const ExpenseRef = builder.prismaObject('Expense', {
@@ -21,11 +23,33 @@ const augmentSchema = (builder: typeof SchemaBuilder) => {
       expense: t.field({
         type: ExpenseRef,
         args: {
-          id: t.arg.int({ required: true }),
+          id: t.arg.int({ required: true })
         },
-        resolve: async (_root, args, _ctx, _info) => {
-          return expenseRepository.getExpenseById(args.id as number);
-        },
+        resolve: async (_root, args, ctx, _info) => {
+          // Require authentication
+          const user = requireAuth(ctx);
+
+          const expense = await expenseRepository.getExpenseById(args.id as number);
+
+          if (!expense) {
+            throw new GraphQLError('Expense not found', {
+              extensions: { code: 'NOT_FOUND' },
+            });
+          }
+
+          // Check if user is involved in this expense (as payer or participant)
+          const isInvolved =
+            expense.payer.id === user.userId ||
+            expense.participants.some(p => p.id === user.userId);
+
+          if (!isInvolved) {
+            throw new GraphQLError("You don't have permission to view this expense", {
+              extensions: { code: 'FORBIDDEN' },
+            });
+          }
+
+          return expense;
+        }
       }),
     }),
   });
@@ -41,11 +65,27 @@ const augmentSchema = (builder: typeof SchemaBuilder) => {
           payerId: t.arg.int({ required: true }),
           participantIds: t.arg({ type: ['Int'], required: true }),
         },
-        resolve: async (_parent, args, _context, _info) => {
+        resolve: async (_parent, args, ctx, _info) => {
+          // Require authentication
+          const user = requireAuth(ctx);
+
+          // User can only create expenses where they are the payer
+          if (user.userId !== args.payerId) {
+            throw new GraphQLError('You can only create expenses that you paid for', {
+              extensions: { code: 'FORBIDDEN' },
+            });
+          }
+
           const { description, amount, date, payerId, participantIds } = args;
           const parsedDate = new Date(date);
-          return expenseRepository.createExpense({ description, amount, date: parsedDate, payerId, participantIds });
-        },
+          return expenseRepository.createExpense({
+            description,
+            amount,
+            date: parsedDate,
+            payerId,
+            participantIds,
+          });
+        }
       }),
     }),
   });
