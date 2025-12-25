@@ -28,3 +28,6 @@ dist-ssr
 *.sw?
 
 **/src/generated
+
+# Lesson specific
+**/backend/reports/*
