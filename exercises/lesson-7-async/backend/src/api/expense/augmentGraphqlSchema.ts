@@ -3,6 +3,8 @@ import SchemaBuilder from '@/graphql/builder';
 import { requireAuth } from '@/graphql/authHelpers';
 import { GraphQLError } from 'graphql';
 import * as expenseRepository from './expenseRepository';
+import { emitExpenseCreated } from '@/socket/events';
+import { NotFoundError } from '@/errors/appErrors';
 
 const augmentSchema = (builder: typeof SchemaBuilder) => {
   const ExpenseRef = builder.prismaObject('Expense', {
@@ -71,13 +73,28 @@ const augmentSchema = (builder: typeof SchemaBuilder) => {
 
           const { description, amount, date, payerId, participantIds } = args;
           const parsedDate = new Date(date);
-          return expenseRepository.createExpense({
+          // 👇 2. Création de la dépense et stockage dans une variable
+          const expense = await expenseRepository.createExpense({
             description,
             amount,
             date: parsedDate,
             payerId,
             participantIds,
           });
+
+          // 👇 3. Émission de l'événement WebSocket
+          // Note: Assurez-vous que expenseRepository retourne bien le payer et les participants
+          emitExpenseCreated({
+            expenseId: expense.id,
+            description: expense.description,
+            amount: expense.amount,
+            payerId: expense.payer.id,
+            payerName: expense.payer.name, 
+            participantIds: expense.participants.map(p => p.id),
+          });
+
+          // 👇 4. Retourner l'objet créé
+          return expense;
         },
       }),
     }),

@@ -3,6 +3,7 @@ import { redisConnection } from '@/config/redis';
 import { PDF_QUEUE_NAME } from '@/queues/pdfQueue';
 import { generateExpenseReport } from '@/services/pdfGenerator';
 import type { GeneratePdfJobData, PdfJobResult } from '@/types/JobTypes';
+import { emitReportReady } from '@/socket/events';
 
 export const pdfWorker = new Worker<GeneratePdfJobData, PdfJobResult>(
   PDF_QUEUE_NAME,
@@ -45,6 +46,17 @@ export const pdfWorker = new Worker<GeneratePdfJobData, PdfJobResult>(
 // Event handlers
 pdfWorker.on('completed', (job) => {
   console.log(`✅ Job ${job.id} completed successfully`);
+
+  // Emit report ready event
+  console.log("job.returnvalue quand job status = completed : "+job.returnvalue);
+  
+  if (job.returnvalue) {
+    emitReportReady({
+      reportId: job.returnvalue.reportId,
+      userId: job.data.userId,
+      downloadUrl: `/reports/${job.returnvalue.filePath}`,
+    });
+  }
 });
 
 pdfWorker.on('failed', (job, err) => {

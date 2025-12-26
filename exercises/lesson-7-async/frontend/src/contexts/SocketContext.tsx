@@ -1,7 +1,17 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { Socket } from 'socket.io-client';
-import { useAuth } from './AuthContext';
-import { connectSocket, disconnectSocket, getSocket } from '@/lib/socket-client';
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  type ReactNode,
+} from "react";
+import { Socket } from "socket.io-client";
+import { useAuth } from "./AuthContext";
+import {
+  connectSocket,
+  disconnectSocket,
+  getSocket,
+} from "@/lib/socket-client";
 
 interface SocketContextType {
   socket: Socket | null;
@@ -27,15 +37,15 @@ export function SocketProvider({ children }: { children: ReactNode }) {
       const handleConnect = () => setIsConnected(true);
       const handleDisconnect = () => setIsConnected(false);
 
-      socketInstance.on('connect', handleConnect);
-      socketInstance.on('disconnect', handleDisconnect);
+      socketInstance.on("connect", handleConnect);
+      socketInstance.on("disconnect", handleDisconnect);
 
       // Set initial connection state
       setIsConnected(socketInstance.connected);
 
       return () => {
-        socketInstance.off('connect', handleConnect);
-        socketInstance.off('disconnect', handleDisconnect);
+        socketInstance.off("connect", handleConnect);
+        socketInstance.off("disconnect", handleDisconnect);
       };
     } else {
       // Disconnect if not authenticated
@@ -55,7 +65,7 @@ export function SocketProvider({ children }: { children: ReactNode }) {
 export function useSocket() {
   const context = useContext(SocketContext);
   if (!context) {
-    throw new Error('useSocket must be used within SocketProvider');
+    throw new Error("useSocket must be used within SocketProvider");
   }
   return context;
 }

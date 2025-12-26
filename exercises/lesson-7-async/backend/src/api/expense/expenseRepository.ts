@@ -34,7 +34,8 @@ export async function createExpense({
   payerId: number;
   participantIds: number[];
 }) {
-  return prisma.expense.create({
+  return prisma.expense.create(
+    {
     data: {
       description,
       amount,
@@ -43,5 +44,10 @@ export async function createExpense({
       // { connect: [{id: 1}, {id: 123}, {id: 99}]}
       participants: { connect: participantIds.map((id) => ({ id })) },
     },
-  });
+    include: {
+      payer: true,
+      participants: true
+    }
+  },
+);
 }
