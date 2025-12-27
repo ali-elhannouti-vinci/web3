@@ -70,7 +70,9 @@ export default function ExpenseForm() {
           participantIds: data.participantIds.map((id) => Number(id)),
         },
       });
-      toast('Expense has been created.');
+      toast('Expense has been created.',{
+        duration:1000
+      });
       return navigate('/transactions');
     } catch (error) {
       console.error('Expense creation failed:', error);

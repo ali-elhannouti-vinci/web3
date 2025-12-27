@@ -64,7 +64,9 @@ export default function Reports() {
       const reportData = response.data.requestExpenseReport;
       setCurrentReportId(reportData.reportId);
       setReportStatus(reportData);
-      toast.success('PDF generation started!');
+      toast.success('PDF generation started!',{
+        duration:1000
+      });
     } catch (error) {
       console.error('Failed to request report:', error);
       toast.error(`Failed to start PDF generation: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -87,7 +89,9 @@ export default function Reports() {
         setReportStatus(status);
         
         if (status.status === 'completed') {
-          toast.success('PDF report ready for download!');
+          toast.success('PDF report ready for download!',{
+            duration:3000
+          });
           setIsPolling(false);
         } else if (status.status === 'failed') {
           toast.error('PDF generation failed');

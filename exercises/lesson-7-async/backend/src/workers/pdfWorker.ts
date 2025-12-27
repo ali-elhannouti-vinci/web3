@@ -44,18 +44,34 @@ export const pdfWorker = new Worker<GeneratePdfJobData, PdfJobResult>(
 );
 
 // Event handlers
-pdfWorker.on('completed', (job) => {
-  console.log(`✅ Job ${job.id} completed successfully`);
+// ✅ REMPLACE ton bloc 'completed' par ceci :
+pdfWorker.on('completed', async (job, returnvalue) => {
+  console.log(`✅ Job ${job.id} terminé avec succès.`);
 
-  // Emit report ready event
-  console.log("job.returnvalue quand job status = completed : "+job.returnvalue);
-  
-  if (job.returnvalue) {
-    emitReportReady({
-      reportId: job.returnvalue.reportId,
-      userId: job.data.userId,
-      downloadUrl: `/reports/${job.returnvalue.filePath}`,
-    });
+  // On vérifie qu'on a bien un résultat (le 2ème argument)
+  if (returnvalue) {
+    try {
+      // 1. Définir l'URL du serveur principal
+      // Utilise la variable d'env ou localhost:3000 par défaut
+      const SERVER_URL = process.env.VITE_API_URL || 'http://localhost:3000';
+      
+      // 2. Appeler le serveur (Le coup de fil)
+      await fetch(`${SERVER_URL}/internal/webhook/report-ready`, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json' 
+        },
+        body: JSON.stringify({
+          userId: job.data.userId,
+          reportId: returnvalue.reportId,
+          downloadUrl: `/reports/${returnvalue.filePath}`, // L'URL relative du PDF
+        }),
+      });
+      
+      console.log(`📞 Notification envoyée au serveur pour User ${job.data.userId}`);
+    } catch (err) {
+      console.error("❌ Le Worker n'a pas réussi à appeler le Serveur :", err);
+    }
   }
 });
 

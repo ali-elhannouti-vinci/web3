@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc && tsup",
-    "start:dev": "node --import=tsx --watch src/index.ts",
+    "start:dev": "node --import=tsx --watch src/index.ts --start-server",
     "start:prod": "node dist/index.js",
     "check": "biome check --write",
     "worker": "tsx src/workers/index.ts",
