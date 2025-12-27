@@ -3,7 +3,7 @@ import { redisConnection } from '@/config/redis';
 import { PDF_QUEUE_NAME } from '@/queues/pdfQueue';
 import { generateExpenseReport } from '@/services/pdfGenerator';
 import type { GeneratePdfJobData, PdfJobResult } from '@/types/JobTypes';
-import { emitReportReady } from '@/socket/events';
+// import { emitReportReady } from '@/socket/events';
 
 export const pdfWorker = new Worker<GeneratePdfJobData, PdfJobResult>(
   PDF_QUEUE_NAME,
